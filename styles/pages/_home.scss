@@ -1,0 +1,109 @@
+html {
+    background: url(../img/atomium.jpg) center / cover no-repeat;
+    height:100vh;
+    color: white;
+    font-family: "Raleway", sans-serif;
+    position: relative;
+    z-index: -1;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #0000005e;
+        z-index: 0;
+    }
+}
+body {
+    position: relative;
+    z-index: 1;
+}
+
+h1, h2 {
+    text-transform: uppercase;
+    font-weight: 300;
+    text-align: right;
+}
+span {
+    color: #87ceeb;
+}
+h1 {
+    margin-right: 20px;
+    font-size: 40px;
+}
+h2 {
+    width: 100%;
+}
+h3 {
+    text-align: left;
+    font-weight: 300;
+    margin-bottom: 0;
+}
+
+input {
+    width: 100%;
+    border-radius: 5px;
+    border: 0.5px #fff solid;
+    background-color: #00000000;
+    height: 30px;
+    text-decoration: none;
+    color: #fff;
+    padding: 9px;
+}
+.description {
+    width:100%;
+    background: none;
+    border: 1px #fff solid;
+    border-radius: 5px;
+    padding: 15px;
+    color: #fff;
+}
+.wrapper {
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+}
+.left, .right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.left::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 110%;
+    width: 110%;
+    border-radius: 5px;
+    background-color: #00000020;
+    z-index: -10;
+    transform: translate(-4%, 0%)
+}
+
+button {
+    text-transform: uppercase;
+    color: #fff;
+    background: none;
+    border-radius: 5px;
+    border: 0.5px #fff solid;
+    background-color: #00000000;
+    height: 30px;
+    width: 102%;
+    cursor: pointer;
+    @include transition;
+    &:hover {
+        background-color: #ffffff44;
+        @include transition;
+    }
+}
