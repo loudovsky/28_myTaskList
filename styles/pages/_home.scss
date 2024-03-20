@@ -1,10 +1,11 @@
 html {
-    background: url(../img/atomium.jpg) center / cover no-repeat;
-    height:100vh;
+    background: url(../img/atomium.jpg) center / cover ;
     color: white;
     font-family: "Raleway", sans-serif;
     position: relative;
-    z-index: -1;
+    z-index: 0;
+    height: 100vh;
+    overflow: hidden;
     &::after {
         content: '';
         position: absolute;
@@ -61,7 +62,7 @@ input {
     color: #fff;
 }
 .wrapper {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
     display: flex;
     align-items: flex-start;
@@ -99,7 +100,7 @@ button {
     border: 0.5px #fff solid;
     background-color: #00000000;
     height: 45px;
-    width: 107%;
+    width: 100%;
     cursor: pointer;
     @include transition;
     &:hover {
@@ -107,8 +108,37 @@ button {
         @include transition;
     }
 }
+.add {
+    width: 107%;
+} 
 
 .done {
     text-transform: uppercase;
     color: greenyellow;
+}
+.tasksInTube {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 25px;
+    .single-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+    }
+    summary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .checkbox {
+        width: 20px;
+        height: 20px;
+    }
+    .end-side {
+        display: flex;
+        gap:10px;
+    }
 }
