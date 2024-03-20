@@ -4,11 +4,11 @@ const date = document.querySelector(".date")
 const description = document.querySelector(".description")
 const ajouter = document.querySelector(".add")
 const inTube = document.querySelector(".tasksInTube")
+const sort = document.querySelector(".sort")
 
 //============== Tableau d'objets ==========
 
 let myTasks = []
-myTasks = JSON.parse(localStorage.getItem('tâches')) || []
 // Le sigle || est un opérateur de coalescence nulle, il renvoie la première valeur qui est non falsy (c’est-à-dire différente de null, undefined, false, 0, NaN ou une chaîne vide)
 
 //============== FONCTIONS =================
@@ -29,7 +29,7 @@ const addNewTask = (quoi, quand, jour, mois, année, comment) => {
 }
 // *** affiche les tâches dans le partie "tube"
 const printTasks = (tab) => {
-    if (myTasks.length === 0) {
+    if (tab.length === 0) {
         inTube.innerHTML = `No task in the tube`
     }
 
@@ -46,15 +46,21 @@ const printTasks = (tab) => {
     };
 }
 
-function deleteTask(lineToKill) {
+const deleteTask = (lineToKill) => {
     myTasks.splice(lineToKill, 1)
-    localStorage.setItem('taches', JSON.stringify(myTasks))
     printTasks(myTasks)
+    localStorage.setItem('tâches', JSON.stringify(myTasks))
+}
+
+const sortTasks = (tab) => {
+    tab.sort((a, b) => a.date - b.date);
+    return tab;
 }
 
 //============== EVENTS =================
 
 // *** permet d'afficher les tâches à l'ouverture de la page si éventuellement des tâches ont déjà été stockées dans l'espace local
+myTasks = JSON.parse(localStorage.getItem('tâches')) || []
 printTasks(myTasks)
 
 // *** permet d'associer une action au clic sur le bouton "AJOUTER"
@@ -70,16 +76,22 @@ ajouter.addEventListener('click', () => {
     console.log(month);
     console.log(year);
 
-    addNewTask(task.value, date.value, day, month, year, description.value);
+    addNewTask(task.value, objectDate, day, month, year, description.value);
     printTasks(myTasks)
     task.value = ""
     date.value = ""
     description.value = ""
 });
 
+// ** tri des tâches en fonction de leur date, lors du clic sur le bouton "TRIER"
+sort.addEventListener('click', () => {
+    sortTasks(myTasks)
+    printTasks(myTasks)
+    localStorage.setItem('tâches', JSON.stringify(myTasks))
+    console.log(myTasks);
+})
 
-
-// *** permet d'associer d'éliminer une tâche au clic sur la croix rouge associée à cette tâche
+// *** ❌ permet d'éliminer une tâche au clic sur la ❌ associée à cette tâche
 inTube.addEventListener('click', function(e) {
     if (e.target.classList.contains('delete')) {
       let placeDansTableau = parseInt(e.target.parentElement.getAttribute('data-index'))
