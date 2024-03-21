@@ -139,17 +139,25 @@ button {
     }
     .end-side {
         display: flex;
-        gap:2px;
+        align-items: center;
+        gap:4px;
+        .delete {
+            font-size: 14px;
+        }
     }
 }
 .numberOfTasks {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     #single-line {
         width: 100%;
         display: flex;
         justify-content: space-between;
+        .start-side {
+            display: flex;
+            gap: 10px;
+        }
     }
 }

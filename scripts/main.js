@@ -44,6 +44,8 @@ const printTasks = (tab) => {
         <p>${tabElement.description}</p>
         </details><div class="end-side"><span class="day">${tabElement.day}</span>/<span class="month">${tabElement.month +1}</span>/<span class="year">${tabElement.year}</span><span class="delete" style="cursor:pointer">🗑️</span></div></div>
         `
+        /*const checkbox = doneTube.querySelector('.checkbox')
+        checkbox.cheked = true;*/
         })
     };
 }
@@ -57,7 +59,7 @@ const addFinishedTask = (quoi, quand, jour, mois, année, comment) => {
         description : comment,
     }
     myFinishedTasks.push(newTaskLine)
-    localStorage.setItem('tâches_finies', JSON.stringify(myTasks))
+    localStorage.setItem('tâches_finies', JSON.stringify(myFinishedTasks))
     console.log(myFinishedTasks);
 }
 
@@ -71,17 +73,24 @@ const printFinishedTasks = (tab) => {
         tab.forEach((tabElement, index) => {
         doneTube.innerHTML +=
         `
-        <div id="single-line" data-index="${index}"><div class="start-side"><input type="checkbox" class="checkbox">${tabElement.name}</div>
+        <div id="single-line" data-index="${index}"><div class="start-side"><input type="checkbox" class="checkbox" checked>${tabElement.name}</div>
         <div class="end-side"><span class="delete" style="cursor:pointer">🗑️</span></div></div>
         `
+
         })
-    };
+    }
 }
 // *** supprime la tâche sur laquelle on a cliqué en fonction de sa place dans le tableau d'objets
 const deleteTask = (lineToKill) => {
     myTasks.splice(lineToKill, 1)
     printTasks(myTasks)
     localStorage.setItem('tâches', JSON.stringify(myTasks))
+}
+// *** supprime la tâche finie sur laquelle on a cliqué en fonction de sa place dans le tableau d'objets dans la section DONE
+const deleteFinishedTask = (lineToKill) => {
+    myFinishedTasks.splice(lineToKill, 1)
+    localStorage.setItem('tâches_finies', JSON.stringify(myFinishedTasks))
+    printFinishedTasks(myFinishedTasks)
 }
 
 // *** classe les tâches en fonction de leur date d'échéance respective
@@ -101,6 +110,7 @@ const sortTasks = (tab) => {
 myTasks = JSON.parse(localStorage.getItem('tâches')) || []
 printTasks(myTasks)
 myFinishedTasks = JSON.parse(localStorage.getItem('tâches_finies')) || []
+printFinishedTasks(myFinishedTasks)
 console.log(`Mon tableau au rafraichissement :${myTasks}`);
 console.log(myTasks);
 // Le sigle || est un opérateur de coalescence nulle, il renvoie la première valeur qui est non falsy (c’est-à-dire différente de null, undefined, false, 0, NaN ou une chaîne vide)
@@ -144,7 +154,7 @@ inTube.addEventListener('click', function(e) {
       deleteTask(placeDansTableau)
     }
   });
-
+// ***  permet de déplacer une tâche cochée et donc finie vers la partie DONE
 inTube.addEventListener('click', (event) => {
 
     if (event.target.checked) {
@@ -166,7 +176,12 @@ inTube.addEventListener('click', (event) => {
         // La case à cocher est cochée
         console.log("La case à cocher est cochée !");
         console.log(myFinishedTasks);
-        // Ajoutez ici le code que vous souhaitez exécuter
+        
+        if (myFinishedTasks.length > 5) {
+            myFinishedTasks.splice(0, 1)
+            printFinishedTasks(myFinishedTasks)
+            localStorage.setItem('tâches_finies', JSON.stringify(myFinishedTasks))
+        }
     } 
     else {
         // La case à cocher est décochée
@@ -175,3 +190,35 @@ inTube.addEventListener('click', (event) => {
     }
   
   });
+
+doneTube.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete')) {
+        let placeDansTableau = parseInt(e.target.closest('#single-line').getAttribute('data-index'))
+      console.log(placeDansTableau);
+      deleteFinishedTask(placeDansTableau)
+    }
+  });
+doneTube.addEventListener('click', (event) => {
+    if (event.target.checked) {
+        console.log("La case à cocher est décochée !")
+    }
+    else {
+        let placeDansTableau = parseInt(event.target.closest('#single-line').getAttribute('data-index'))
+        console.log(placeDansTableau);
+
+        let description = myFinishedTasks[placeDansTableau].description
+        let name = myFinishedTasks[placeDansTableau].name
+        let day = myFinishedTasks[placeDansTableau].day
+        let month = myFinishedTasks[placeDansTableau].month
+        let year = myFinishedTasks[placeDansTableau].year
+        let formattedDate = myFinishedTasks[placeDansTableau].date
+
+        addNewTask(name, formattedDate, day, month, year, description);
+        printTasks(myTasks)
+
+        deleteFinishedTask(placeDansTableau)
+        // La case à cocher est décochée
+        console.log("La case à cocher est cochée !");
+        // Ajoutez ici le code que vous souhaitez exécuter
+    }
+})
