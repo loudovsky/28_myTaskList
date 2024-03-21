@@ -116,13 +116,17 @@ button {
     text-transform: uppercase;
     color: greenyellow;
 }
+.checkbox {
+    width: 20px;
+    height: 20px;
+}
 .tasksInTube {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 25px;
-    .single-line {
+    #single-line {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
@@ -133,12 +137,19 @@ button {
         align-items: center;
         gap: 10px;
     }
-    .checkbox {
-        width: 20px;
-        height: 20px;
-    }
     .end-side {
         display: flex;
-        gap:10px;
+        gap:2px;
+    }
+}
+.numberOfTasks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    #single-line {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
     }
 }
