@@ -199,10 +199,7 @@ doneTube.addEventListener('click', (e) => {
     }
   });
 doneTube.addEventListener('click', (event) => {
-    if (event.target.checked) {
-        console.log("La case à cocher est décochée !")
-    }
-    else {
+    if (!event.target.checked) {
         let placeDansTableau = parseInt(event.target.closest('#single-line').getAttribute('data-index'))
         console.log(placeDansTableau);
 
@@ -218,6 +215,10 @@ doneTube.addEventListener('click', (event) => {
 
         deleteFinishedTask(placeDansTableau)
         // La case à cocher est décochée
+        console.log("La case à cocher est décochée !");
+    }
+    else {
+        
         console.log("La case à cocher est cochée !");
         // Ajoutez ici le code que vous souhaitez exécuter
     }
