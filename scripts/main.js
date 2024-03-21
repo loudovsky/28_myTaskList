@@ -79,6 +79,12 @@ const printFinishedTasks = (tab) => {
 
         })
     }
+
+    if (myFinishedTasks.length > 5) {
+        myFinishedTasks.splice(0, 1)
+        printFinishedTasks(myFinishedTasks)
+        localStorage.setItem('tâches_finies', JSON.stringify(myFinishedTasks))
+    }
 }
 // *** supprime la tâche sur laquelle on a cliqué en fonction de sa place dans le tableau d'objets
 const deleteTask = (lineToKill) => {
@@ -176,12 +182,6 @@ inTube.addEventListener('click', (event) => {
         // La case à cocher est cochée
         console.log("La case à cocher est cochée !");
         console.log(myFinishedTasks);
-        
-        if (myFinishedTasks.length > 5) {
-            myFinishedTasks.splice(0, 1)
-            printFinishedTasks(myFinishedTasks)
-            localStorage.setItem('tâches_finies', JSON.stringify(myFinishedTasks))
-        }
     } 
     else {
         // La case à cocher est décochée
