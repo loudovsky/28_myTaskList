@@ -6,6 +6,7 @@ const ajouter = document.querySelector(".add")
 const inTube = document.querySelector(".tasksInTube")
 const doneTube = document.querySelector(".numberOfTasks")
 const sort = document.querySelector(".sort")
+let draggedItem = null;
 
 
 //============== Tableau d'objets ==========
@@ -40,9 +41,9 @@ const printTasks = (tab) => {
         tab.forEach((tabElement, index) => {
         inTube.innerHTML +=
         `
-        <div id="single-line" data-index="${index}"><details><summary><input type="checkbox" class="checkbox">${tabElement.name}</summary>
+        <li id="single-line" data-index="${index}" draggable="true"><details><summary><input type="checkbox" class="checkbox">${tabElement.name}</summary>
         <p>${tabElement.description}</p>
-        </details><div class="end-side"><span class="day">${tabElement.day}</span>/<span class="month">${tabElement.month +1}</span>/<span class="year">${tabElement.year}</span><span class="delete" style="cursor:pointer">🗑️</span></div></div>
+        </details><div class="end-side"><span class="day">${tabElement.day}</span>/<span class="month">${tabElement.month +1}</span>/<span class="year">${tabElement.year}</span><span class="delete" style="cursor:pointer">🗑️</span></div></li>
         `
         /*const checkbox = doneTube.querySelector('.checkbox')
         checkbox.cheked = true;*/
@@ -152,7 +153,7 @@ sort.addEventListener('click', () => {
     console.log(myTasks);
 })
 
-// *** ❌ permet d'éliminer une tâche au clic sur la ❌ associée à cette tâche
+// *** permet d'éliminer une tâche au clic sur la 🗑️ associée à cette tâche
 inTube.addEventListener('click', function(e) {
     if (e.target.classList.contains('delete')) {
       let placeDansTableau = parseInt(e.target.closest('#single-line').getAttribute('data-index'))
@@ -190,7 +191,7 @@ inTube.addEventListener('click', (event) => {
     }
   
   });
-
+// ***  permet de supprimer une tâche présente dans la partie DONE 
 doneTube.addEventListener('click', (e) => {
     if (e.target.classList.contains('delete')) {
         let placeDansTableau = parseInt(e.target.closest('#single-line').getAttribute('data-index'))
@@ -198,6 +199,8 @@ doneTube.addEventListener('click', (e) => {
       deleteFinishedTask(placeDansTableau)
     }
   });
+
+ // ***  permet de décocher une case et d'enclecher son déplacement automatique vers la partie InTube (la section des tâches toujours en cours)
 doneTube.addEventListener('click', (event) => {
     if (!event.target.checked) {
         let placeDansTableau = parseInt(event.target.closest('#single-line').getAttribute('data-index'))
@@ -223,3 +226,75 @@ doneTube.addEventListener('click', (event) => {
         // Ajoutez ici le code que vous souhaitez exécuter
     }
 })
+
+// ***  permet d'initialiser un effet drag & drop, dans la section inTube
+inTube.addEventListener(
+    "dragstart",
+    (e) => {
+        draggedItem = e.target;
+        setTimeout(() => {
+            e.target.style.display =
+                "none";
+        }, 0);
+});
+ 
+inTube.addEventListener(
+    "dragend",
+    (e) => {
+        setTimeout(() => {
+            e.target.style.display = "";
+            draggedItem = null;
+        }, 0);
+});
+ 
+inTube.addEventListener(
+    "dragover",
+    (e) => {
+        e.preventDefault();
+        const afterElement =
+            getDragAfterElement(
+                inTube,
+                e.clientY);
+        const currentElement =
+            document.querySelector(
+                ".dragging");
+        if (afterElement == null) {
+            inTube.appendChild(
+                draggedItem
+            );} 
+        else {
+            inTube.insertBefore(
+                draggedItem,
+                afterElement
+            );}
+    });
+ 
+const getDragAfterElement = (
+    container, y
+) => {
+    const draggableElements = [
+        ...container.querySelectorAll(
+            "li:not(.dragging)"
+        ),];
+ 
+    return draggableElements.reduce(
+        (closest, child) => {
+            const box =
+                child.getBoundingClientRect();
+            const offset =
+                y - box.top - box.height / 2;
+            if (
+                offset < 0 &&
+                offset > closest.offset) {
+                return {
+                    offset: offset,
+                    element: child,
+                };} 
+            else {
+                return closest;
+            }},
+        {
+            offset: Number.NEGATIVE_INFINITY,
+        }
+    ).element;
+};
